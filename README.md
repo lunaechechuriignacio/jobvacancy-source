@@ -13,4 +13,4 @@
 
 ## Travis Link:
 
-[![Build Status](https://travis-ci.org/lunaechechuriignacio/jobvacancy-source.svg)](https://travis-ci.org/lunaechechuriignacio/jobvacancy-source)
+[![Build Status](https://travis-ci.org/lunaechechuriignacio/jobvacancy-source.svg?branch=develop)](https://travis-ci.org/lunaechechuriignacio/jobvacancy-source)
