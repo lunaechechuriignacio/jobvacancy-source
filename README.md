@@ -6,7 +6,7 @@
 * Martin Fernandez Gamen
 
 ## Trello:
-* [https://trello.com/org/5625322ee8461fa6d1ec130e](https://trello.com/org/5625322ee8461fa6d1ec130e)
+* [https://trello.com/b/t82eGD5P](https://trello.com/b/t82eGD5P)
 
 ## Repositorio (github) Link:
 
