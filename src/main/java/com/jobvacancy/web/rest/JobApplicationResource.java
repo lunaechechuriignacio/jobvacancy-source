@@ -9,6 +9,7 @@ import com.jobvacancy.security.SecurityUtils;
 import com.jobvacancy.service.MailService;
 import com.jobvacancy.web.rest.dto.JobApplicationDTO;
 import com.jobvacancy.web.rest.util.HeaderUtil;
+import com.jobvacancy.web.rest.util.EmailAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -44,11 +45,24 @@ public class JobApplicationResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<JobOffer> createJobApplication(@Valid @RequestBody JobApplicationDTO jobApplication) throws URISyntaxException {
-        log.debug("REST request to save JobApplication : {}", jobApplication);
-        JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
-        this.mailService.sendApplication(jobApplication.getEmail(), jobOffer);
+        
+    	ResponseEntity<JobOffer> responseJobApplication;
+    	
+    	log.debug("REST request to save JobApplication : {}", jobApplication);
+        
+        EmailAddressValidator emailValidator = new EmailAddressValidator();
+        
+        if (emailValidator.validateEmail(jobApplication.getEmail())) {
+        	
+        	JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
+            this.mailService.sendApplication(jobApplication.getEmail(), jobOffer);
+            responseJobApplication=ResponseEntity.accepted().headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
+        } else {
+        	jobApplication.setEmail("");
+        	responseJobApplication=ResponseEntity.badRequest().headers(HeaderUtil.
+        			createAlert("Wrong email address, application was not proccesed", "")).body(null);
+        }
 
-        return ResponseEntity.accepted()
-            .headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
+        return responseJobApplication;
     }
 }
