@@ -1,4 +1,3 @@
-
 <form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
 
     <div class="modal-header">
@@ -27,19 +26,22 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="field_email">Your Email</label>
-            <input type="text" class="form-control" name="location" id="field_email"
-                    ng-model="jobApplication.email"
-                    required>
-            <div ng-show="editForm.email.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.email.$error.required">
-                    This field is required.
+           <label for="field_email">Your Email</label>
+           <input type="email" class="form-control" name="email" id="field_email"
+                   ng-model="jobApplication.email" 
+				   ng-pattern="/^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/" 
+				   required>
+            <div style="color:red" ng-show="editForm.email.$dirty && editForm.email.$invalid">
+                <p class="help-block" ng-show="editForm.email.$error.required">
+                    Your e-mail is required.
                 </p>
-            </div>
+				<p class="help-block" ng-show="editForm.email.$error.email">
+					Your e-mail is invalid.
+				</p>
+			</div>
         </div>
-
     </div>
+	
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>

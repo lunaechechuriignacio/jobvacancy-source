@@ -58,9 +58,9 @@ public class JobApplicationResource {
             this.mailService.sendApplication(jobApplication.getEmail(), jobOffer);
             responseJobApplication=ResponseEntity.accepted().headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
         } else {
-        	jobApplication.setEmail("");
         	responseJobApplication=ResponseEntity.badRequest().headers(HeaderUtil.
         			createAlert("Wrong email address, application was not proccesed", "")).body(null);
+        	jobApplication.setEmail("");
         }
 
         return responseJobApplication;
