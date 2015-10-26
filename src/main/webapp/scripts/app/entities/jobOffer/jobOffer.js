@@ -86,7 +86,7 @@ angular.module('jobvacancyApp')
             })
             .state('jobOffer.republish', {
                 parent: 'jobOffer',
-                url: '/{id}/republish',
+                url: '/{id}/edit',
                data: {
                     authorities: ['ROLE_USER'],
                 },
@@ -95,19 +95,18 @@ angular.module('jobvacancyApp')
                         templateUrl: 'scripts/app/entities/jobOffer/jobOffer-dialog.html',
                         controller: 'JobOfferDialogController',
                         size: 'lg',
-                        resolve: {
-                       
-						  entity: ['JobOffer', function(JobOffer) {
-                                return JobOffer.get({id : $stateParams.id});
-								
-                           }]
-							
+						resolve: {
+							entity: function () {
+             					return {title: 'test', location: 'test', description: 'test', id: null};
+                            }
                         }
-                    }).result.then(function(result) {
-                        $state.go('jobOffer', null, { reload: true });
+                   	}).result.then(function(result) {
+						$state.go('jobOffer', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })
                 }]
-            });
+            })
+			
+			;
     });
