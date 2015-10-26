@@ -22,10 +22,10 @@ angular.module('jobvacancyApp').controller('JobOfferDialogController',
 			$scope.save = function () {
 
 				if ($scope.jobOffer.id != null) {
-					if (republish === false) {
+					if (republish === true) {$scope.jobOffer.id = null;
 						JobOffer.save($scope.jobOffer, onSaveFinished);
 					} else {
-						$scope.jobOffer.id = null;
+						
 						JobOffer.update($scope.jobOffer, onSaveFinished);
 					}
 
