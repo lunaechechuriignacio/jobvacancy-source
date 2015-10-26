@@ -83,30 +83,5 @@ angular.module('jobvacancyApp')
                         $state.go('^');
                     })
                 }]
-            })
-            .state('jobOffer.republish', {
-                parent: 'jobOffer',
-                url: '/{id}/edit',
-               data: {
-                    authorities: ['ROLE_USER'],
-                },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
-                        templateUrl: 'scripts/app/entities/jobOffer/jobOffer-dialog.html',
-                        controller: 'JobOfferDialogController',
-                        size: 'lg',
-						resolve: {
-							entity: function () {
-             					return {title: 'test', location: 'test', description: 'test', id: null};
-                            }
-                        }
-                   	}).result.then(function(result) {
-						$state.go('jobOffer', null, { reload: true });
-                    }, function() {
-                        $state.go('^');
-                    })
-                }]
-            })
-			
-			;
+            });
     });
