@@ -8,7 +8,6 @@ import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.security.AuthoritiesConstants;
 import com.jobvacancy.service.UserService;
 import com.jobvacancy.web.rest.dto.ManagedUserDTO;
-import com.jobvacancy.web.rest.dto.UserDTO;
 import com.jobvacancy.web.rest.util.HeaderUtil;
 import com.jobvacancy.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
