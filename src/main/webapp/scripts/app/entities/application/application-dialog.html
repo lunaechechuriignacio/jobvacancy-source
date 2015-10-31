@@ -41,12 +41,22 @@
 			</div>
         </div>
     
-<div class="form-group">
-            <label for="LINK">Your Cv Link</label> 
-            <input type="text" class="form-control" name="fullname" id="field_link"
-                   
+ <div class="form-group">
+            <label for="field_url">Your Cv Link</label>
+            <input type="url" class="form-control" name="location" id="field_url"
+                    ng-model="jobApplication.url" ng-pattern="/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/"
                     required>
-           
+            <div ng-show="editForm.url.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.url.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.url.$error.url">
+                    Your url is invalid.
+                </p>
+            </div>
+        </div>
+
         </div>
 
 
