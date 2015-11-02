@@ -33,7 +33,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class JobOfferResource {
-
+	private int countOfferHist=0;
     private final Logger log = LoggerFactory.getLogger(JobOfferResource.class);
 
     @Inject
@@ -58,6 +58,7 @@ public class JobOfferResource {
         Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
         jobOffer.setOwner(currentUser.get());
         JobOffer result = jobOfferRepository.save(jobOffer);
+        this.countOfferHist++;
         return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString()))
                 .body(result);
