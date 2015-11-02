@@ -41,211 +41,75 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class ApplicationResourceTest {
 
-    private static final String APPLICANT_FULLNAME = "THE APPLICANT";
-    private static final String APPLICANT_EMAIL = "APPLICANT@TEST.COM";
-       
-    private static final String APPLICANT_VALID_EMAIL_1 = "martin@test.com";
-    private static final String APPLICANT_VALID_EMAIL_2 = "martin+1@test.com";
-    private static final String APPLICANT_VALID_EMAIL_3 = "martin@test.com.ar";
-    
-    private static final String APPLICANT_INVALID_EMAIL_1 = "zaraza";
-    private static final String APPLICANT_INVALID_EMAIL_2 = "@zaraza";
-    private static final String APPLICANT_INVALID_EMAIL_3 = "zaraza@";
-    private static final String APPLICANT_INVALID_EMAIL_4 = "zaraza@test";
-    private static final String APPLICANT_INVALID_EMAIL_5 = "   @test.com";
-    
-    private MockMvc restMockMvc;
+	private static final String APPLICANT_FULLNAME = "THE APPLICANT";
+	private static final String APPLICANT_EMAIL = "APPLICANT@TEST.COM";
 
-    private static final long OFFER_ID = 1;
-    private static final String OFFER_TITLE = "SAMPLE_TEXT";
-    private static final String OFFER_URL = "https://www.dropbox.com/s/5cmg2gr84g4fmhz/cv.pdf?dl=0";
+	private static final String APPLICANT_VALID_EMAIL_1 = "martin@test.com";
+	private static final String APPLICANT_VALID_EMAIL_2 = "martin+1@test.com";
+	private static final String APPLICANT_VALID_EMAIL_3 = "martin@test.com.ar";
 
-    @Mock
-    private MailService mailService;
+	private static final String APPLICANT_INVALID_EMAIL_1 = "zaraza";
+	private static final String APPLICANT_INVALID_EMAIL_2 = "@zaraza";
+	private static final String APPLICANT_INVALID_EMAIL_3 = "zaraza@";
+	private static final String APPLICANT_INVALID_EMAIL_4 = "zaraza@test";
+	private static final String APPLICANT_INVALID_EMAIL_5 = "   @test.com";
 
-    @Mock
-    private JobOfferRepository jobOfferRepository;
+	private MockMvc restMockMvc;
 
-    @Inject
-    private UserRepository userRepository;
+	private static final long OFFER_ID = 1;
+	private static final String OFFER_TITLE = "SAMPLE_TEXT";
+	private static final String OFFER_URL = "https://www.dropbox.com/s/5cmg2gr84g4fmhz/cv.pdf?dl=0";
 
-    @Inject
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+	@Mock
+	private MailService mailService;
 
-    private JobOffer offer;
+	@Mock
+	private JobOfferRepository jobOfferRepository;
 
-    @PostConstruct
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        Optional<User> user = userRepository.findOneByLogin("user");
-        offer = new JobOffer();
-        offer.setTitle(OFFER_TITLE);
-        offer.setId(OFFER_ID);
-        offer.setOwner(user.get());
-        when(jobOfferRepository.findOne(OFFER_ID)).thenReturn(offer);
-        JobApplicationResource jobApplicationResource = new JobApplicationResource();
-        ReflectionTestUtils.setField(jobApplicationResource, "jobOfferRepository", jobOfferRepository);
-        ReflectionTestUtils.setField(jobApplicationResource, "mailService", mailService);
+	@Inject
+	private UserRepository userRepository;
 
-        this.restMockMvc = MockMvcBuilders.standaloneSetup(jobApplicationResource)
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
+	@Inject
+	private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Test
-    @Transactional
-    public void createJobApplication() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_EMAIL);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-        dto.setUrl(OFFER_URL);
+	private JobOffer offer;
 
-        //when(mailService.sendEmail(to, subject,content,false, false)).thenReturn(Mockito.v);
-        doNothing().when(mailService).sendApplication(APPLICANT_EMAIL, offer);
+	@PostConstruct
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		Optional<User> user = userRepository.findOneByLogin("user");
+		offer = new JobOffer();
+		offer.setTitle(OFFER_TITLE);
+		offer.setId(OFFER_ID);
+		offer.setOwner(user.get());
+		when(jobOfferRepository.findOne(OFFER_ID)).thenReturn(offer);
+		JobApplicationResource jobApplicationResource = new JobApplicationResource();
+		ReflectionTestUtils.setField(jobApplicationResource, "jobOfferRepository", jobOfferRepository);
+		ReflectionTestUtils.setField(jobApplicationResource, "mailService", mailService);
 
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isAccepted());
+		this.restMockMvc = MockMvcBuilders.standaloneSetup(jobApplicationResource)
+				.setMessageConverters(jacksonMessageConverter).build();
+	}
 
-        Mockito.verify(mailService).sendApplication(APPLICANT_EMAIL, offer);
-        //StrictAssertions.assertThat(testJobOffer.getLocation()).isEqualTo(DEFAULT_LOCATION);
-        //StrictAssertions.assertThat(testJobOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-    }
-    
-    /*
-    @Test
-    @Transactional
-    public void createJobApplicationWithValidMail1() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_VALID_EMAIL_1);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
+	@Test
+	@Transactional
+	public void createJobApplication() throws Exception {
+		JobApplicationDTO dto = new JobApplicationDTO();
+		dto.setEmail(APPLICANT_EMAIL);
+		dto.setFullname(APPLICANT_FULLNAME);
+		dto.setOfferId(OFFER_ID);
+		dto.setUrl(OFFER_URL);
 
-        doNothing().when(mailService).sendApplication(APPLICANT_VALID_EMAIL_1, offer);
+		// when(mailService.sendEmail(to, subject,content,false,
+		// false)).thenReturn(Mockito.v);
+		doNothing().when(mailService).sendApplication(APPLICANT_EMAIL, offer);
 
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isAccepted());
+		restMockMvc.perform(post("/api/Application").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isAccepted());
 
-        Mockito.verify(mailService).sendApplication(APPLICANT_VALID_EMAIL_1, offer);
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithValidMail2() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_VALID_EMAIL_2);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_VALID_EMAIL_2, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isAccepted());
-
-        Mockito.verify(mailService).sendApplication(APPLICANT_VALID_EMAIL_2, offer);
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithValidMail3() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_VALID_EMAIL_3);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_VALID_EMAIL_3, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isAccepted());
-
-        Mockito.verify(mailService).sendApplication(APPLICANT_VALID_EMAIL_3, offer);
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithInvalidMail1() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_INVALID_EMAIL_1);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_INVALID_EMAIL_1, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithInvalidMail2() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_INVALID_EMAIL_2);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_INVALID_EMAIL_2, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithInvalidMail3() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_INVALID_EMAIL_3);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_INVALID_EMAIL_3, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithInvalidMail4() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_INVALID_EMAIL_4);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_INVALID_EMAIL_4, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    @Transactional
-    public void createJobApplicationWithInvalidMail5() throws Exception {
-        JobApplicationDTO dto = new JobApplicationDTO();
-        dto.setEmail(APPLICANT_INVALID_EMAIL_5);
-        dto.setFullname(APPLICANT_FULLNAME);
-        dto.setOfferId(OFFER_ID);
-
-        doNothing().when(mailService).sendApplication(APPLICANT_INVALID_EMAIL_5, offer);
-
-        restMockMvc.perform(post("/api/Application")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-                .andExpect(status().isBadRequest());
-    }*/
+		Mockito.verify(mailService).sendApplication(APPLICANT_EMAIL, offer);
+		// StrictAssertions.assertThat(testJobOffer.getLocation()).isEqualTo(DEFAULT_LOCATION);
+		// StrictAssertions.assertThat(testJobOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+	}
 
 }
