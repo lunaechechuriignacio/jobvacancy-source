@@ -7,6 +7,8 @@ import com.jobvacancy.service.MailService;
 import com.jobvacancy.web.rest.dto.JobApplicationDTO;
 import com.jobvacancy.web.rest.util.HeaderUtil;
 import com.jobvacancy.web.rest.util.EmailAddressValidator;
+import com.jobvacancy.web.rest.util.UrlValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
+
 import java.net.URISyntaxException;
 
 
@@ -46,6 +50,18 @@ public class JobApplicationResource {
     	log.debug("REST request to save JobApplication : {}", jobApplication);
         
         EmailAddressValidator emailValidator = new EmailAddressValidator();
+          UrlValidator urlValidator=new UrlValidator();
+        
+      if (urlValidator.validateUrl(jobApplication.getUrl())) {
+            
+            JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
+            this.mailService.sendApplication(jobApplication.getUrl(), jobOffer);
+            responseJobApplication=ResponseEntity.accepted().headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
+        } else {
+            responseJobApplication=ResponseEntity.badRequest().headers(HeaderUtil.
+                    createAlert("Wrong URL address, application was not proccesed", "")).body(null);
+            jobApplication.setUrl("");
+        }
         
         if (emailValidator.validateEmail(jobApplication.getEmail())) {
         	
