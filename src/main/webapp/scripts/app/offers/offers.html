@@ -12,6 +12,10 @@
             </div>
         </div>
     </div>
+	
+	<div>
+		<h4><b>Posted Offers: {{jobOffers.length}} </b>offers are available right now!</h4>
+	</div>
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -54,16 +58,7 @@
                 <li ng-show="links['last'] > 0" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
             </ul>
         </nav>
-    </div>
-	
-	<h3>Current Number of Posted Offers</h3>
-		<div>
-			<p>
-				<b>Current Accounting:</b>
-				<p>{{jobOffers.length}} offers are available right now.</p>
-			</p>
-	</div>
-	
+    </div>	
 </div>
 
 <!--
