@@ -45,7 +45,8 @@
             </tr>
             </tbody>
         </table>
-        <nav>
+		
+		<nav>
             <ul class="pager">
                 <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
                 <li ng-show="page > 0" ng-click="loadPage(links['prev'] || 0)"><a href="#">&lt;</a></li>
@@ -54,6 +55,15 @@
             </ul>
         </nav>
     </div>
+	
+	<h3>Current Number of Posted Offers</h3>
+		<div>
+			<p>
+				<b>Current Accounting:</b>
+				<p>{{jobOffers.length}} offers are available right now.</p>
+			</p>
+	</div>
+	
 </div>
 
 <!--
