@@ -44,16 +44,6 @@ public class ApplicationResourceTest {
 	private static final String APPLICANT_FULLNAME = "THE APPLICANT";
 	private static final String APPLICANT_EMAIL = "APPLICANT@TEST.COM";
 
-	private static final String APPLICANT_VALID_EMAIL_1 = "martin@test.com";
-	private static final String APPLICANT_VALID_EMAIL_2 = "martin+1@test.com";
-	private static final String APPLICANT_VALID_EMAIL_3 = "martin@test.com.ar";
-
-	private static final String APPLICANT_INVALID_EMAIL_1 = "zaraza";
-	private static final String APPLICANT_INVALID_EMAIL_2 = "@zaraza";
-	private static final String APPLICANT_INVALID_EMAIL_3 = "zaraza@";
-	private static final String APPLICANT_INVALID_EMAIL_4 = "zaraza@test";
-	private static final String APPLICANT_INVALID_EMAIL_5 = "   @test.com";
-
 	private MockMvc restMockMvc;
 
 	private static final long OFFER_ID = 1;

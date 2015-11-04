@@ -3,8 +3,7 @@ package com.jobvacancy.domain.util;
 import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.hibernate.type.descriptor.sql.BinaryTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
-
-import java.sql.Types;
+import java.sql.*;
 
 public class FixedPostgreSQL82Dialect extends PostgreSQL82Dialect {
 

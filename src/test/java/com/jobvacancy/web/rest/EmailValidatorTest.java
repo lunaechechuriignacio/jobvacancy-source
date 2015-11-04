@@ -42,55 +42,53 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class EmailValidatorTest {
 	
-	  private static final String APPLICANT_FULLNAME = "THE APPLICANT";
-	    private static final String APPLICANT_EMAIL = "APPLICANT@TEST.COM";
-	       
-	    private static final String APPLICANT_VALID_EMAIL_1 = "martin@test.com";
-	    private static final String APPLICANT_VALID_EMAIL_2 = "martin+1@test.com";
-	    private static final String APPLICANT_VALID_EMAIL_3 = "martin@test.com.ar";
-	    
-	    private static final String APPLICANT_INVALID_EMAIL_1 = "zaraza";
-	    private static final String APPLICANT_INVALID_EMAIL_2 = "@zaraza";
-	    private static final String APPLICANT_INVALID_EMAIL_3 = "zaraza@";
-	    private static final String APPLICANT_INVALID_EMAIL_4 = "zaraza@test";
-	    private static final String APPLICANT_INVALID_EMAIL_5 = "   @test.com";
-	    
-	    private MockMvc restMockMvc;
+  	private static final String APPLICANT_FULLNAME = "THE APPLICANT";
+  	private static final String APPLICANT_VALID_EMAIL_1 = "martin@test.com";
+  	private static final String APPLICANT_VALID_EMAIL_2 = "martin+1@test.com";
+  	private static final String APPLICANT_VALID_EMAIL_3 = "martin@test.com.ar";
+    
+   	private static final String APPLICANT_INVALID_EMAIL_1 = "zaraza";
+   	private static final String APPLICANT_INVALID_EMAIL_2 = "@zaraza";	
+    private static final String APPLICANT_INVALID_EMAIL_3 = "zaraza@";
+    private static final String APPLICANT_INVALID_EMAIL_4 = "zaraza@test";
+    private static final String APPLICANT_INVALID_EMAIL_5 = "   @test.com";
+    
+    private MockMvc restMockMvc;
 
-	    private static final long OFFER_ID = 1;
-	    private static final String OFFER_TITLE = "SAMPLE_TEXT";
-	    private static final String OFFER_URL = "https://www.dropbox.com/s/5cmg2gr84g4fmhz/cv.pdf?dl=0";
+    private static final long OFFER_ID = 1;
+    private static final String OFFER_TITLE = "SAMPLE_TEXT";
+    private static final String OFFER_URL = "https://www.dropbox.com/s/5cmg2gr84g4fmhz/cv.pdf?dl=0";
 
-	    @Mock
-	    private MailService mailService;
+    @Mock
+    private MailService mailService;
 
-	    @Mock
-	    private JobOfferRepository jobOfferRepository;
+    @Mock
+    private JobOfferRepository jobOfferRepository;
 
-	    @Inject
-	    private UserRepository userRepository;
+    @Inject
+    private UserRepository userRepository;
 
-	    @Inject
-	    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Inject
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-	    private JobOffer offer;
+    private JobOffer offer;
 
-	    @PostConstruct
-	    public void setup() {
-	        MockitoAnnotations.initMocks(this);
-	        Optional<User> user = userRepository.findOneByLogin("user");
-	        offer = new JobOffer();
-	        offer.setTitle(OFFER_TITLE);
-	        offer.setId(OFFER_ID);
-	        offer.setOwner(user.get());
-	        when(jobOfferRepository.findOne(OFFER_ID)).thenReturn(offer);
-	        JobApplicationResource jobApplicationResource = new JobApplicationResource();
-	        ReflectionTestUtils.setField(jobApplicationResource, "jobOfferRepository", jobOfferRepository);
-	        ReflectionTestUtils.setField(jobApplicationResource, "mailService", mailService);
+    @PostConstruct
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        Optional<User> user = userRepository.findOneByLogin("user");
+        offer = new JobOffer();
+        offer.setTitle(OFFER_TITLE);
+        offer.setId(OFFER_ID);
+        offer.setOwner(user.get());
+        when(jobOfferRepository.findOne(OFFER_ID)).thenReturn(offer);
+        JobApplicationResource jobApplicationResource = new JobApplicationResource();
+        ReflectionTestUtils.setField(jobApplicationResource, "jobOfferRepository", jobOfferRepository);
+        ReflectionTestUtils.setField(jobApplicationResource, "mailService", mailService);
 
-	        this.restMockMvc = MockMvcBuilders.standaloneSetup(jobApplicationResource)
-	            .setMessageConverters(jacksonMessageConverter).build();
-	    }
+        this.restMockMvc = MockMvcBuilders.standaloneSetup(jobApplicationResource)
+            .setMessageConverters(jacksonMessageConverter).build();
+    }
 
 	@Test
 	public void EmailValidoHotmail() {

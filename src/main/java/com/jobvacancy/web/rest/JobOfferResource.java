@@ -226,7 +226,15 @@ public class JobOfferResource {
             throws URISyntaxException {
         Page<JobOffer> page = jobOfferRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/offers");
+        
+        String counterValue = Integer.toString(this.getCountOfferHist());
+        headers.add("countOfferHist", counterValue);
+        System.out.println("Cantidad Historica de Ofertas Publicadas: " + counterValue);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+	public int getCountOfferHist() {
+		return countOfferHist;
+	}
 
 }
