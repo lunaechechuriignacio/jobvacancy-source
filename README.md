@@ -1,7 +1,7 @@
 # Grupo MAIG
 
 ## Integrantes:
-
+ 
 * Ignacio Luna Echechuri
 * Martin Fernandez Gamen
 
