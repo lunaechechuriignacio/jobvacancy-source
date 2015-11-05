@@ -5,10 +5,10 @@
 * Ignacio Luna Echechuri
 * Martin Fernandez Gamen
 
-## Trello:
+## Trello: 
 * [https://trello.com/b/t82eGD5P](https://trello.com/b/t82eGD5P)
 
-## Repositorio (github) Link:
+## Repositorio (github)  Link:
 
 * [https://github.com/lunaechechuriignacio/jobvacancy-source.git](https://github.com/lunaechechuriignacio/jobvacancy-source.git)
 
