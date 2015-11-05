@@ -2,6 +2,7 @@ package com.jobvacancy.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.jobvacancy.domain.JobOffer;
+import com.jobvacancy.domain.JobOfferHistoric;
 import com.jobvacancy.domain.User;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
@@ -33,192 +34,179 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class JobOfferResource {
-	private int countOfferHist=0;
-    private final Logger log = LoggerFactory.getLogger(JobOfferResource.class);
+	
+	private JobOfferHistoric jobOfferHistoric;
+	private final Logger log = LoggerFactory.getLogger(JobOfferResource.class);
 
-    @Inject
-    private JobOfferRepository jobOfferRepository;
+	public JobOfferResource() {
+		this.jobOfferHistoric=new JobOfferHistoric();
+	}
 
-    @Inject
-    private UserRepository userRepository;
+	@Inject
+	private JobOfferRepository jobOfferRepository;
 
-    /**
-     * POST  /jobOffers -> Create a new jobOffer.
-     */
-    @RequestMapping(value = "/jobOffers",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<JobOffer> createJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
-        log.debug("REST request to save JobOffer : {}", jobOffer);
-        if (jobOffer.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure", "A new jobOffer cannot already have an ID").body(null);
-        }
-        String currentLogin = SecurityUtils.getCurrentLogin();
-        Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
-        jobOffer.setOwner(currentUser.get());
-        JobOffer result = jobOfferRepository.save(jobOffer);
-        this.countOfferHist++;
-        return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString()))
-                .body(result);
-    }
+	@Inject
+	private UserRepository userRepository;
 
-    /**
-     * PUT  /jobOffers -> Updates an existing jobOffer.
-     */
-    @RequestMapping(value = "/jobOffers",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<JobOffer> updateJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
-        log.debug("REST request to update JobOffer : {}", jobOffer);
-        if (jobOffer.getId() == null) {
-            return createJobOffer(jobOffer);
-        }
-        JobOffer result = jobOfferRepository.save(jobOffer);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("jobOffer", jobOffer.getId().toString()))
-                .body(result);
-    }
+	/**
+	 * POST /jobOffers -> Create a new jobOffer.
+	 */
+	@RequestMapping(value = "/jobOffers", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<JobOffer> createJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
+		log.debug("REST request to save JobOffer : {}", jobOffer);
+		if (jobOffer.getId() != null) {
+			return ResponseEntity.badRequest().header("Failure", "A new jobOffer cannot already have an ID").body(null);
+		}
+		String currentLogin = SecurityUtils.getCurrentLogin();
+		Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
+		jobOffer.setOwner(currentUser.get());
+		JobOffer result = jobOfferRepository.save(jobOffer);
+		this.jobOfferHistoric.setAddOneCountOfferHistoric();
+		return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
+				.headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString())).body(result);
+	}
 
-    /**
-     * GET  /jobOffers -> get all the jobOffers.
-     */
-/*
-    @RequestMapping(value = "/jobOffers",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable pageable)
-        throws URISyntaxException {
-        Page<JobOffer> page = jobOfferRepository.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-*/
+	/**
+	 * PUT /jobOffers -> Updates an existing jobOffer.
+	 */
+	@RequestMapping(value = "/jobOffers", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<JobOffer> updateJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
+		log.debug("REST request to update JobOffer : {}", jobOffer);
+		if (jobOffer.getId() == null) {
+			return createJobOffer(jobOffer);
+		}
+		JobOffer result = jobOfferRepository.save(jobOffer);
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("jobOffer", jobOffer.getId().toString()))
+				.body(result);
+	}
 
-    @RequestMapping(value = "/jobOffers",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable pageable)
-        throws URISyntaxException {
-        List<JobOffer> list = jobOfferRepository.findByOwnerIsCurrentUser();
-        Page<JobOffer> page = new Page<JobOffer>() {
-            @Override
-            public int getTotalPages() {
-                return 1;
-            }
+	/**
+	 * GET /jobOffers -> get all the jobOffers.
+	 */
+	/*
+	 * @RequestMapping(value = "/jobOffers", method = RequestMethod.GET,
+	 * produces = MediaType.APPLICATION_JSON_VALUE)
+	 * 
+	 * @Timed public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable
+	 * pageable) throws URISyntaxException { Page<JobOffer> page =
+	 * jobOfferRepository.findAll(pageable); HttpHeaders headers =
+	 * PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
+	 * return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK); }
+	 */
 
-            @Override
-            public long getTotalElements() {
-                return list.size();
-            }
+	@RequestMapping(value = "/jobOffers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable pageable) throws URISyntaxException {
+		List<JobOffer> list = jobOfferRepository.findByOwnerIsCurrentUser();
+		Page<JobOffer> page = new Page<JobOffer>() {
+			@Override
+			public int getTotalPages() {
+				return 1;
+			}
 
-            @Override
-            public int getNumber() {
-                return 0;
-            }
+			@Override
+			public long getTotalElements() {
+				return list.size();
+			}
 
-            @Override
-            public int getSize() {
-                return list.size();
-            }
+			@Override
+			public int getNumber() {
+				return 0;
+			}
 
-            @Override
-            public int getNumberOfElements() {
-                return list.size();
-            }
+			@Override
+			public int getSize() {
+				return list.size();
+			}
 
-            @Override
-            public List<JobOffer> getContent() {
-                return list;
-            }
+			@Override
+			public int getNumberOfElements() {
+				return list.size();
+			}
 
-            @Override
-            public boolean hasContent() {
-                return true;
-            }
+			@Override
+			public List<JobOffer> getContent() {
+				return list;
+			}
 
-            @Override
-            public Sort getSort() {
-                return null;
-            }
+			@Override
+			public boolean hasContent() {
+				return true;
+			}
 
-            @Override
-            public boolean isFirst() {
-                return true;
-            }
+			@Override
+			public Sort getSort() {
+				return null;
+			}
 
-            @Override
-            public boolean isLast() {
-                return true;
-            }
+			@Override
+			public boolean isFirst() {
+				return true;
+			}
 
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
+			@Override
+			public boolean isLast() {
+				return true;
+			}
 
-            @Override
-            public boolean hasPrevious() {
-                return false;
-            }
+			@Override
+			public boolean hasNext() {
+				return false;
+			}
 
-            @Override
-            public Pageable nextPageable() {
-                return null;
-            }
+			@Override
+			public boolean hasPrevious() {
+				return false;
+			}
 
-            @Override
-            public Pageable previousPageable() {
-                return null;
-            }
+			@Override
+			public Pageable nextPageable() {
+				return null;
+			}
 
-            @Override
-            public Iterator<JobOffer> iterator() {
-                return list.iterator();
-            }
-        };
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+			@Override
+			public Pageable previousPageable() {
+				return null;
+			}
 
-    /**
-     * GET  /jobOffers/:id -> get the "id" jobOffer.
-     */
-    @RequestMapping(value = "/jobOffers/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<JobOffer> getJobOffer(@PathVariable Long id) {
-        log.debug("REST request to get JobOffer : {}", id);
-        return Optional.ofNullable(jobOfferRepository.findOne(id))
-            .map(jobOffer -> new ResponseEntity<>(
-                jobOffer,
-                HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
+			@Override
+			public Iterator<JobOffer> iterator() {
+				return list.iterator();
+			}
+		};
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
+		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+	}
 
-    /**
-     * DELETE  /jobOffers/:id -> delete the "id" jobOffer.
-     */
-    @RequestMapping(value = "/jobOffers/{id}",
-            method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<Void> deleteJobOffer(@PathVariable Long id) {
-        log.debug("REST request to delete JobOffer : {}", id);
-        jobOfferRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("jobOffer", id.toString())).build();
-    }
+	/**
+	 * GET /jobOffers/:id -> get the "id" jobOffer.
+	 */
+	@RequestMapping(value = "/jobOffers/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<JobOffer> getJobOffer(@PathVariable Long id) {
+		log.debug("REST request to get JobOffer : {}", id);
+		return Optional.ofNullable(jobOfferRepository.findOne(id))
+				.map(jobOffer -> new ResponseEntity<>(jobOffer, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
 
+	/**
+	 * DELETE /jobOffers/:id -> delete the "id" jobOffer.
+	 */
+	@RequestMapping(value = "/jobOffers/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<Void> deleteJobOffer(@PathVariable Long id) {
+		log.debug("REST request to delete JobOffer : {}", id);
+		jobOfferRepository.delete(id);
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("jobOffer", id.toString())).build();
+	}
 
-    /**
-     * GET  /jobOffers -> get all the jobOffers.
-     */
-    @RequestMapping(value = "/offers",
+	/**
+	 * GET /jobOffers -> get all the jobOffers.
+	 */
+	@RequestMapping(value = "/offers",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -226,15 +214,8 @@ public class JobOfferResource {
             throws URISyntaxException {
         Page<JobOffer> page = jobOfferRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/offers");
-        
-        String counterValue = Integer.toString(this.getCountOfferHist());
-        headers.add("countOfferHist", counterValue);
-        System.out.println("Cantidad Historica de Ofertas Publicadas: " + counterValue);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-	public int getCountOfferHist() {
-		return countOfferHist;
-	}
-
+	
 }
