@@ -7,7 +7,10 @@
 
 <h3>Posted Offers Information</h3>
 <div>
-	<FORM METHOD="LINK" ACTION="#/historicalOffer"> <INPUT TYPE="submit" VALUE="Detailed information"> </FORM>
+	<p>{{servicesStats["com.jobvacancy.web.rest.JobOfferResource.createJobOffer"].count}} historical offers.</p>
+	</p>
+	<p>{{servicesStats["com.jobvacancy.web.rest.JobOfferResource.createJobOffer"].count - servicesStats["com.jobvacancy.web.rest.JobOfferResource.deleteJobOffer"].count}} offers are available right now.</p>
+	</p>
 </div>
 
 <h3>JVM Metrics</h3>

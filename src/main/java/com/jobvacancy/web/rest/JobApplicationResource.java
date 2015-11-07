@@ -2,13 +2,12 @@ package com.jobvacancy.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.jobvacancy.domain.JobOffer;
+import com.jobvacancy.domain.util.EmailAddressValidator;
+import com.jobvacancy.domain.util.UrlValidator;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.service.MailService;
 import com.jobvacancy.web.rest.dto.JobApplicationDTO;
 import com.jobvacancy.web.rest.util.HeaderUtil;
-import com.jobvacancy.web.rest.util.EmailAddressValidator;
-import com.jobvacancy.web.rest.util.UrlValidator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;

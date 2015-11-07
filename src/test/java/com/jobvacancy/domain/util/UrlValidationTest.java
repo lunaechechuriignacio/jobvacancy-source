@@ -1,9 +1,7 @@
-package com.jobvacancy.web.rest;
+package com.jobvacancy.domain.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.jobvacancy.web.rest.util.UrlValidator;
 
 public class UrlValidationTest {
 

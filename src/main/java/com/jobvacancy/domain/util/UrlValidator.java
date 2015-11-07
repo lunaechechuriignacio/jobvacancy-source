@@ -1,4 +1,4 @@
-package com.jobvacancy.web.rest.util;
+package com.jobvacancy.domain.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package com.jobvacancy.web.rest;
+package com.jobvacancy.domain.util;
 
 
 import com.jobvacancy.Application;
@@ -7,9 +7,10 @@ import com.jobvacancy.domain.User;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.service.MailService;
+import com.jobvacancy.web.rest.JobApplicationResource;
+import com.jobvacancy.web.rest.TestUtil;
 import com.jobvacancy.web.rest.dto.JobApplicationDTO;
-import com.jobvacancy.web.rest.util.EmailAddressValidator;
-
+import com.jobvacancy.domain.util.EmailAddressValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
