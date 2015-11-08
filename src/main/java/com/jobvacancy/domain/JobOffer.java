@@ -30,6 +30,9 @@ public class JobOffer implements Serializable {
     
     @Column(name = "description")
     private String description;
+    
+   // @Column(name = "dateExpires")
+   // private String dateExpires;
 
     @ManyToOne
     private User owner;
@@ -65,7 +68,16 @@ public class JobOffer implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+/*
+  	public String getDateExpires() {
+		return dateExpires;
+	}
 
+	public void setDateExpires(String dateExpires) {
+		this.dateExpires  ="asdasdas";//dateExpires;
+	}
+        */
+    
     public User getOwner() {
         return owner;
     }
@@ -102,6 +114,9 @@ public class JobOffer implements Serializable {
                 ", title='" + title + "'" +
                 ", location='" + location + "'" +
                 ", description='" + description + "'" +
+              //  ", dateExpires='" + dateExpires + "'" +
                 '}';
     }
+
+
 }

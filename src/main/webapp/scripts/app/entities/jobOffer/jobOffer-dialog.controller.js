@@ -1,9 +1,13 @@
 'use strict';
 
-angular.module('jobvacancyApp').controller('JobOfferDialogController',
+var a=angular.module('jobvacancyApp')
+
+a.controller('JobOfferDialogController',
 	['$scope', '$stateParams', '$modalInstance', 'entity', 'JobOffer', 'User', 'republish',
 		function ($scope, $stateParams, $modalInstance, entity, JobOffer, User, republish) {
 
+ 
+			$scope.today =new Date().toISOString();
 			$scope.jobOffer = entity;
 			$scope.users = User.query();
 			$scope.load = function (id) {
@@ -14,7 +18,8 @@ angular.module('jobvacancyApp').controller('JobOfferDialogController',
 				});
 			};
 
-			var onSaveFinished = function (result) {
+			
+ 			var onSaveFinished = function (result) {
 				$scope.$emit('jobvacancyApp:jobOfferUpdate', result);
 				$modalInstance.close(result);
 			};
@@ -30,6 +35,8 @@ angular.module('jobvacancyApp').controller('JobOfferDialogController',
 					}
 
 				} else {
+					 var today=new Date();
+  $scope.today = today.toISOString();
 					JobOffer.save($scope.jobOffer, onSaveFinished);
 				}
 
@@ -40,3 +47,5 @@ angular.module('jobvacancyApp').controller('JobOfferDialogController',
 			};
 		}
 	]);
+
+
