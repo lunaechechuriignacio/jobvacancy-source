@@ -9,6 +9,7 @@ a.controller('JobOfferDialogController',
  
 			$scope.today =new Date().toISOString();
 			$scope.jobOffer = entity;
+									
 			$scope.users = User.query();
 			$scope.load = function (id) {
 				JobOffer.get({

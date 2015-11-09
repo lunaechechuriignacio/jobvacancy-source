@@ -19,7 +19,7 @@
     <addColumn catalogName="cat"
             schemaName="public"
             tableName="JOB_OFFER">
-        <column name="dateExpires" type="varchar(255)"/>
+        <column name="date_expires" type="timestamp"/>
     </addColumn>
 </changeSet>
    
