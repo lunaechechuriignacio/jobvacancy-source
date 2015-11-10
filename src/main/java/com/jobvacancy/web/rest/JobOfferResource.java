@@ -212,8 +212,87 @@ public class JobOfferResource {
     @Timed
     public ResponseEntity<List<JobOffer>> getAllOffers(Pageable pageable)
             throws URISyntaxException {
-        Page<JobOffer> page = jobOfferRepository.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/offers");
+        
+		List<JobOffer> list = jobOfferRepository.findByCurrentOffer();
+		Page<JobOffer> page = new Page<JobOffer>() {
+			@Override
+			public int getTotalPages() {
+				return 1;
+			}
+
+			@Override
+			public long getTotalElements() {
+				return list.size();
+			}
+
+			@Override
+			public int getNumber() {
+				return 0;
+			}
+
+			@Override
+			public int getSize() {
+				return list.size();
+			}
+
+			@Override
+			public int getNumberOfElements() {
+				return list.size();
+			}
+
+			@Override
+			public List<JobOffer> getContent() {
+				return list;
+			}
+
+			@Override
+			public boolean hasContent() {
+				return true;
+			}
+
+			@Override
+			public Sort getSort() {
+				return null;
+			}
+
+			@Override
+			public boolean isFirst() {
+				return true;
+			}
+
+			@Override
+			public boolean isLast() {
+				return true;
+			}
+
+			@Override
+			public boolean hasNext() {
+				return false;
+			}
+
+			@Override
+			public boolean hasPrevious() {
+				return false;
+			}
+
+			@Override
+			public Pageable nextPageable() {
+				return null;
+			}
+
+			@Override
+			public Pageable previousPageable() {
+				return null;
+			}
+
+			@Override
+			public Iterator<JobOffer> iterator() {
+				return list.iterator();
+			}
+		};
+
+		
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/offers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
