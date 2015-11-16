@@ -35,10 +35,17 @@ public class JobOffer implements Serializable {
     
     @Column(name = "date_expires")
     private Date dateExpires;
+    
+    @Column(name = "applied")
+    private long applied;
 
     @ManyToOne
     private User owner;
-
+    
+    public JobOffer(){
+    	this.applied=0;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -87,8 +94,16 @@ public class JobOffer implements Serializable {
     public void setOwner(User user) {
         this.owner = user;
     }
+    
+    public long getApplied() {
+		return applied;
+	}
 
-    @Override
+	public void setApplied() {
+		this.applied += 1;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -117,6 +132,7 @@ public class JobOffer implements Serializable {
                 ", location='" + location + "'" +
                 ", description='" + description + "'" +
                 ", dateExpires='" + dateExpires.toString() + "'" +
+                ", applied='" + applied + "'" +
                 '}';
     }
     

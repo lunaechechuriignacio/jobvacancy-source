@@ -7,7 +7,7 @@ import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.service.MailService;
 import com.jobvacancy.web.rest.dto.JobApplicationDTO;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -102,4 +102,22 @@ public class ApplicationResourceTest {
 		// StrictAssertions.assertThat(testJobOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 	}
 
+	@Test
+	@Transactional
+	public void createJobApplicationPlusApplicants() throws Exception {
+		JobApplicationDTO dto = new JobApplicationDTO();
+		dto.setEmail(APPLICANT_EMAIL);
+		dto.setFullname(APPLICANT_FULLNAME);
+		dto.setOfferId(OFFER_ID);
+		dto.setUrl(OFFER_URL);
+		dto.setApplied();
+
+		doNothing().when(mailService).sendApplication(APPLICANT_EMAIL, offer);
+
+		restMockMvc.perform(post("/api/Application").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isAccepted());
+
+		Assert.assertEquals(1, dto.getApplied());
+	}
+	
 }

@@ -45,34 +45,44 @@ public class JobApplicationResource {
     public ResponseEntity<JobOffer> createJobApplication(@Valid @RequestBody JobApplicationDTO jobApplication) throws URISyntaxException {
         
     	ResponseEntity<JobOffer> responseJobApplication;
+    	JobOffer jobOffer=null;
+    	boolean validJobApp = true;
     	
     	log.debug("REST request to save JobApplication : {}", jobApplication);
         
         EmailAddressValidator emailValidator = new EmailAddressValidator();
           UrlValidator urlValidator=new UrlValidator();
         
-      if (urlValidator.validateUrl(jobApplication.getUrl())) {
+        if (urlValidator.validateUrl(jobApplication.getUrl())) {
             
-            JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
+            jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
             this.mailService.sendApplication(jobApplication.getUrl(), jobOffer);
+            validJobApp = true;
             responseJobApplication=ResponseEntity.accepted().headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
         } else {
             responseJobApplication=ResponseEntity.badRequest().headers(HeaderUtil.
                     createAlert("Wrong URL address, application was not proccesed", "")).body(null);
             jobApplication.setUrl("");
+            validJobApp = false;
         }
         
         if (emailValidator.validateEmail(jobApplication.getEmail())) {
         	
-        	JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
+        	jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
             this.mailService.sendApplication(jobApplication.getEmail(), jobOffer);
+            validJobApp = true;
             responseJobApplication=ResponseEntity.accepted().headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
         } else {
         	responseJobApplication=ResponseEntity.badRequest().headers(HeaderUtil.
         			createAlert("Wrong email address, application was not proccesed", "")).body(null);
         	jobApplication.setEmail("");
+        	validJobApp = false;
         }
-
+        
+        if (validJobApp) {
+        	jobOffer.setApplied();
+        	jobOfferRepository.save(jobOffer);
+        }
         return responseJobApplication;
     }
 }
