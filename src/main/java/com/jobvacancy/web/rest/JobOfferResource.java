@@ -4,11 +4,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.jobvacancy.domain.JobOffer;
 import com.jobvacancy.domain.JobOfferHistoric;
 import com.jobvacancy.domain.User;
+import com.jobvacancy.domain.util.DateValidator;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.security.SecurityUtils;
 import com.jobvacancy.web.rest.util.HeaderUtil;
 import com.jobvacancy.web.rest.util.PaginationUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
@@ -55,16 +58,22 @@ public class JobOfferResource {
 	@Timed
 	public ResponseEntity<JobOffer> createJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
 		log.debug("REST request to save JobOffer : {}", jobOffer);
+		DateValidator dateValidator = new DateValidator();		
 		if (jobOffer.getId() != null) {
 			return ResponseEntity.badRequest().header("Failure", "A new jobOffer cannot already have an ID").body(null);
 		}
 		String currentLogin = SecurityUtils.getCurrentLogin();
 		Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
 		jobOffer.setOwner(currentUser.get());
-		JobOffer result = jobOfferRepository.save(jobOffer);
-		this.jobOfferHistoric.setAddOneCountOfferHistoric();
-		return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
-				.headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString())).body(result);
+		
+		if (dateValidator.validateDate(jobOffer.getDateExpires().toString())){
+			JobOffer result = jobOfferRepository.save(jobOffer);
+			this.jobOfferHistoric.setAddOneCountOfferHistoric();
+			return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
+					.headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString())).body(result);
+		} else {
+			return ResponseEntity.badRequest().header("Failure", "Bad Date format, please try using YYYY-MM-DD format.").body(null);
+		}
 	}
 
 	/**
