@@ -7,7 +7,8 @@ angular.module('jobvacancyApp')
         $scope.loadAll = function() {
             Offer.query({page: $scope.page, size: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
-                $scope.jobOffers = result;
+              
+               $scope.jobOffers = result;
             });
         };
         $scope.loadPage = function(page) {

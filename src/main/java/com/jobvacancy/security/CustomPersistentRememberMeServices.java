@@ -1,7 +1,6 @@
 package com.jobvacancy.security;
 
 import com.jobvacancy.domain.PersistentToken;
-import com.jobvacancy.domain.User;
 import com.jobvacancy.repository.PersistentTokenRepository;
 import com.jobvacancy.repository.UserRepository;
 import org.joda.time.LocalDate;
@@ -19,7 +18,6 @@ import org.springframework.security.web.authentication.rememberme.InvalidCookieE
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -5,14 +5,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * A JobOffer.
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "JOB_OFFER")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -31,10 +32,20 @@ public class JobOffer implements Serializable {
     
     @Column(name = "description")
     private String description;
+    
+    @Column(name = "date_expires")
+    private Date dateExpires;
+    
+    @Column(name = "applied")
+    private long applied;
 
     @ManyToOne
     private User owner;
-
+    
+    public JobOffer(){
+    	this.applied=0;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -67,6 +78,15 @@ public class JobOffer implements Serializable {
         this.description = description;
     }
 
+    public Date getDateExpires() { 
+    	  java.sql.Date date = new java.sql.Date(dateExpires.getTime());
+    	  return date;
+    	}
+
+	public void setDateExpires(Date dateExpires) {
+		this.dateExpires = dateExpires;
+	}
+    
     public User getOwner() {
         return owner;
     }
@@ -74,8 +94,16 @@ public class JobOffer implements Serializable {
     public void setOwner(User user) {
         this.owner = user;
     }
+    
+    public long getApplied() {
+		return applied;
+	}
 
-    @Override
+	public void setApplied() {
+		this.applied += 1;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -103,6 +131,9 @@ public class JobOffer implements Serializable {
                 ", title='" + title + "'" +
                 ", location='" + location + "'" +
                 ", description='" + description + "'" +
+                ", dateExpires='" + dateExpires.toString() + "'" +
+                ", applied='" + applied + "'" +
                 '}';
     }
+    
 }

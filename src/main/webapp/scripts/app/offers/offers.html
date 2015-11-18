@@ -12,6 +12,10 @@
             </div>
         </div>
     </div>
+	
+	<div>
+		<h4><b>Posted Offers: {{jobOffers.length}} </b>offers are available right now!</h4>
+	</div>
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -20,7 +24,8 @@
                 <th>Title</th>
                 <th>Location</th>
                 <th>Description</th>
-                <th>Actions</th>
+                <th>Expiring Date</th>
+				<th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -28,6 +33,7 @@
                 <td>{{jobOffer.title}}</td>
                 <td>{{jobOffer.location}}</td>
                 <td>{{jobOffer.description}}</td>
+				<td>{{jobOffer.dateExpires}}</td>
                 <td>
                     <!--
                     <button type="submit"
@@ -45,7 +51,8 @@
             </tr>
             </tbody>
         </table>
-        <nav>
+		
+		<nav>
             <ul class="pager">
                 <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
                 <li ng-show="page > 0" ng-click="loadPage(links['prev'] || 0)"><a href="#">&lt;</a></li>
@@ -53,7 +60,7 @@
                 <li ng-show="links['last'] > 0" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
             </ul>
         </nav>
-    </div>
+    </div>	
 </div>
 
 <!--
