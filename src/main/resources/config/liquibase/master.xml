@@ -9,5 +9,7 @@
     <include file="classpath:config/liquibase/changelog/20151109020000_added_column_JobOffer.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151115020001_added_column_JobOffer.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151120080001_added_column_JobOffer.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151121102001_added_column_JobOffer.xml" relativeToChangelogFile="false"/>
+ 
     <!-- JHipster will add liquibase changelogs here -->
 </databaseChangeLog>
