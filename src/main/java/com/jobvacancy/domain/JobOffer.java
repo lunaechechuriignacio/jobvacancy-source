@@ -111,12 +111,15 @@ public class JobOffer implements Serializable {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		
+		@SuppressWarnings("unused")
+		boolean test = this.dateValidation;
+		
 		return Integer.parseInt( sdf.format(new Date()))>Integer.parseInt(sdf.format(this.dateExpires));  
 	}
 
 	public void setDateValidation() {
 		Date date = new Date();
-		this.dateValidation = (date.compareTo(this.getDateExpires())> 0);
+		this.dateValidation = date.compareTo(this.getDateExpires())> 0;
 
 	}
 
