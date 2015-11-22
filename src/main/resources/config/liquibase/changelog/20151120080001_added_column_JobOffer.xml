@@ -15,7 +15,7 @@
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle"/>
 
-   <changeSet author=" Ignacio Luna" id="2015112008001">
+   <changeSet author=" Ignacio Luna" id="20151120080001">
     <addColumn catalogName="cat"
             schemaName="public"
             tableName="JOB_OFFER">

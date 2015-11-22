@@ -40,6 +40,9 @@ public class JobOffer implements Serializable {
 	@Column(name = "applied")
 	private long applied;
 
+	@Column(name = "satisfied")
+	private boolean satisfied;
+	
 	@Column(name = "date_validation")
 	private boolean dateValidation;
 
@@ -122,6 +125,14 @@ public class JobOffer implements Serializable {
 		this.dateValidation = date.compareTo(this.getDateExpires())> 0;
 
 	}
+	
+	public boolean isSatisfied() {
+		return satisfied;
+	}
+
+	public void setSatisfied(boolean satisfied) {
+		this.satisfied = satisfied;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -149,7 +160,7 @@ public class JobOffer implements Serializable {
 	public String toString() {
 		return "JobOffer{" + "id=" + id + ", title='" + title + "'" + ", location='" + location + "'"
 				+ ", description='" + description + "'" + ", dateExpires='" + dateExpires.toString() + "'"
-				+ ", applied='" + applied + "'" + '}';
+				+ ", applied='" + applied + "'" + ", satisfied='" + satisfied + "'" + '}';
 	}
 
 }
