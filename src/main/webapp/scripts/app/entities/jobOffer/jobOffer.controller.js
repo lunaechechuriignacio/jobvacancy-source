@@ -4,7 +4,6 @@ angular.module('jobvacancyApp')
     .controller('JobOfferController', function ($scope, JobOffer, ParseLinks) {
         $scope.jobOffers = [];
         $scope.page = 0;
-        $scope.validar=true;
         $scope.loadAll = function() {
             JobOffer.query({page: $scope.page, size: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));

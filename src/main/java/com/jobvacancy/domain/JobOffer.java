@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -107,14 +108,15 @@ public class JobOffer implements Serializable {
 	}
 
 	public boolean getDateValidation() {
-		Date date = new Date();
-		boolean inle = (date.compareTo(this.getDateExpires()) >= 0);
-		return inle;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		
+		return Integer.parseInt( sdf.format(new Date()))>Integer.parseInt(sdf.format(this.dateExpires));  
 	}
 
 	public void setDateValidation() {
 		Date date = new Date();
-		this.dateValidation = (date.compareTo(this.getDateExpires()) >= 0);
+		this.dateValidation = (date.compareTo(this.getDateExpires())> 0);
 
 	}
 
