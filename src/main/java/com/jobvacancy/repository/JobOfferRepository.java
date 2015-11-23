@@ -13,7 +13,7 @@ public interface JobOfferRepository extends JpaRepository<JobOffer,Long> {
     @Query("select jobOffer from JobOffer jobOffer where jobOffer.owner.login = ?#{principal.username}")
     List<JobOffer> findByOwnerIsCurrentUser();
     
-    @Query("select jobOffer from JobOffer jobOffer where jobOffer.dateExpires >= getdate()")
+    @Query("select jobOffer from JobOffer jobOffer where jobOffer.dateExpires >= getdate() and satisfied=false")
     List<JobOffer> findByCurrentOffer();
 
 }

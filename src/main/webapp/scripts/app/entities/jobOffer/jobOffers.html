@@ -46,7 +46,7 @@
                     <th>Description</th>
                     <th>Expiring Date</th>
 					<th>Applicants number</th>
-                    <th>Satisfied</th>
+           <!--         <th>Satisfied</th>         -->
                     <th></th>
                 </tr>
             </thead>
@@ -59,7 +59,7 @@
                     <td>{{jobOffer.description}}</td>
                     <td>{{jobOffer.dateExpires}}</td>
 					<td>{{jobOffer.applied}}</td>
-                    <td>{{jobOffer.satisfied}}</td>
+            <!--           <td>{{jobOffer.satisfied}}</td>         -->
                    
                     <td>
                         <button type="submit"
@@ -94,8 +94,8 @@
                         </button>
                         <button type="submit" ng-show="jobOffer.satisfied"
                                 ui-sref="jobOffer.satisfied({id:jobOffer.id})" 
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-ok"></span>&nbsp;<span> UnSatisfied</span>
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> UnSatisfied</span>
                         </button>
 
                     </td>
