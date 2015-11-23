@@ -80,12 +80,11 @@
                         </button>
                          <button type="submit"  ng-show="jobOffer.dateValidation"
                                 ui-sref="jobOffer.edit({id:jobOffer.id})"
-                                
                                 class="btn btn-warning btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>&nbsp;<span> Republish</span>
                         </button>
                          <button type="submit"
-                                ng-click="delete(jobOffer.id)"
+                                ui-sref="jobOffer.satisfied({id:jobOffer.id})"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-ok"></span>&nbsp;<span> Satisfied</span>
                         </button>

@@ -76,7 +76,7 @@ public class JobOfferResource {
 		}
 	}
 
-	/**
+	/** 	
 	 * PUT /jobOffers -> Updates an existing jobOffer.
 	 */
 	@RequestMapping(value = "/jobOffers", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -86,25 +86,15 @@ public class JobOfferResource {
 		if (jobOffer.getId() == null) {
 			return createJobOffer(jobOffer);
 		}
+		
 		JobOffer result = jobOfferRepository.save(jobOffer);
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("jobOffer", jobOffer.getId().toString()))
 				.body(result);
 	}
-
+	
 	/**
 	 * GET /jobOffers -> get all the jobOffers.
 	 */
-	/*
-	 * @RequestMapping(value = "/jobOffers", method = RequestMethod.GET,
-	 * produces = MediaType.APPLICATION_JSON_VALUE)
-	 * 
-	 * @Timed public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable
-	 * pageable) throws URISyntaxException { Page<JobOffer> page =
-	 * jobOfferRepository.findAll(pageable); HttpHeaders headers =
-	 * PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
-	 * return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK); }
-	 */
-
 	@RequestMapping(value = "/jobOffers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable pageable) throws URISyntaxException {
@@ -211,7 +201,7 @@ public class JobOfferResource {
 		jobOfferRepository.delete(id);
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("jobOffer", id.toString())).build();
 	}
-
+	
 	/**
 	 * GET /jobOffers -> get all the jobOffers.
 	 */

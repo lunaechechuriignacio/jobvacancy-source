@@ -58,6 +58,11 @@ public class JobOffer implements Serializable {
 	}
 
 	public void setId(Long id) {
+		
+		if (id ==null) {
+			this.setSatisfied(false);
+		}
+		
 		this.id = id;
 	}
 
