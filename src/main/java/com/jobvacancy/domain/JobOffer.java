@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public class JobOffer implements Serializable {
 
 	@Column(name = "satisfied")
 	private boolean satisfied;
-	
+
 	@Column(name = "date_validation")
 	private boolean dateValidation;
 
@@ -58,11 +59,11 @@ public class JobOffer implements Serializable {
 	}
 
 	public void setId(Long id) {
-		
-		if (id ==null) {
+
+		if (id == null) {
 			this.setSatisfied(false);
 		}
-		
+
 		this.id = id;
 	}
 
@@ -116,33 +117,47 @@ public class JobOffer implements Serializable {
 	}
 
 	public boolean getDateValidation() {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		
+
 		@SuppressWarnings("unused")
 		boolean test = this.dateValidation;
-		
-		return Integer.parseInt( sdf.format(new Date()))>Integer.parseInt(sdf.format(this.dateExpires));  
+
+		return Integer.parseInt(sdf.format(new Date())) > Integer.parseInt(sdf
+				.format(this.dateExpires));
 	}
 
 	public void setDateValidation() {
 		Date date = new Date();
-		this.dateValidation = date.compareTo(this.getDateExpires())> 0;
+		this.dateValidation = date.compareTo(this.getDateExpires()) > 0;
 
 	}
-	
+
 	public boolean isSatisfied() {
 		return satisfied;
 	}
 
 	public void setSatisfied(boolean satisfied) {
-		if (this.id==null)
-		this.satisfied = false;
-		else
-			if (satisfied==false)
-				this.satisfied=true;
-			else
-				this.satisfied=false;
+		if (this.id == null)
+			this.satisfied = false;
+		else if (satisfied == false) {
+			this.dateCorrection();
+			this.satisfied = true;
+		}
+
+		else {
+			this.dateCorrection();
+			this.satisfied = false;
+		}
+	}
+
+	private void dateCorrection() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(this.dateExpires);
+		c.add(Calendar.DATE, 1);
+
+		this.dateExpires = c.getTime();
+
 	}
 
 	@Override
@@ -169,9 +184,11 @@ public class JobOffer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "JobOffer{" + "id=" + id + ", title='" + title + "'" + ", location='" + location + "'"
-				+ ", description='" + description + "'" + ", dateExpires='" + dateExpires.toString() + "'"
-				+ ", applied='" + applied + "'" + ", satisfied='" + satisfied + "'" + '}';
+		return "JobOffer{" + "id=" + id + ", title='" + title + "'"
+				+ ", location='" + location + "'" + ", description='"
+				+ description + "'" + ", dateExpires='"
+				+ dateExpires.toString() + "'" + ", applied='" + applied + "'"
+				+ ", satisfied='" + satisfied + "'" + '}';
 	}
 
 }
