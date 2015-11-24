@@ -53,7 +53,19 @@
                     <span class="form-control-static">{{jobOffer.applied}}</span>
                 </td>
             </tr>
-
+			<tr>
+                <td>
+                    <span>Offer Status</span>
+                </td>
+                <td ng-show="jobOffer.satisfied">
+                    <span class="form-control-static">SATISFIED				
+					</span>
+                </td>
+				<td ng-show="!jobOffer.satisfied">
+                    <span class="form-control-static">NOT SATISFIED		
+					</span>
+                </td>
+            </tr>
         </tbody>
 
 
