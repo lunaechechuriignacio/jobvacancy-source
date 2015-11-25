@@ -6,9 +6,9 @@ a.controller('JobOfferDialogController',
 	['$scope', '$stateParams', '$modalInstance', 'entity', 'JobOffer', 'User', 'republish',
 		function ($scope, $stateParams, $modalInstance, entity, JobOffer, User, republish) {
 
- 
-			$scope.today =new Date().toISOString();
+  			$scope.today =new Date().toISOString();
 			$scope.jobOffer = entity;
+		
 									
 			$scope.users = User.query();
 			$scope.load = function (id) {
@@ -16,6 +16,10 @@ a.controller('JobOfferDialogController',
 					id : id
 				}, function (result) {
 					$scope.jobOffer = result;
+					for (var o in jobOffer){
+
+						
+					}
 				});
 			};
 
