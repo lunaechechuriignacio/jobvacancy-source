@@ -39,7 +39,9 @@ public class JobOffer implements Serializable {
 	@Column(name = "applied")
 	private long applied;
 
-	
+	@Column(name = "date_validation")
+	private boolean dateValidation;
+
 	@ManyToOne
 	private User owner;
 
@@ -102,6 +104,18 @@ public class JobOffer implements Serializable {
 
 	public void setApplied() {
 		this.applied += 1;
+	}
+
+	public boolean getDateValidation() {
+		Date date = new Date();
+		boolean inle = (date.compareTo(this.getDateExpires()) >= 0);
+		return inle;
+	}
+
+	public void setDateValidation() {
+		Date date = new Date();
+		this.dateValidation = (date.compareTo(this.getDateExpires()) >= 0);
+
 	}
 
 	@Override
