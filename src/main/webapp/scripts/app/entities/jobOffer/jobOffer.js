@@ -35,6 +35,9 @@ angular.module('jobvacancyApp')
 			republish : function () {
 				return false;
 			},
+				satisfied : function () {
+							return false;
+						},
 			entity : ['$stateParams', 'JobOffer', function ($stateParams, JobOffer) {
 					return JobOffer.get({
 						id : $stateParams.id
@@ -57,6 +60,9 @@ angular.module('jobvacancyApp')
 					size : 'lg',
 					resolve : {
 						republish : function () {
+							return false;
+						},
+							satisfied : function () {
 							return false;
 						},
 						entity : function () {
@@ -85,12 +91,16 @@ angular.module('jobvacancyApp')
 			authorities : ['ROLE_USER'],
 		},
 		onEnter : ['$stateParams', '$state', '$modal', function ($stateParams, $state, $modal) {
+				  	
 				$modal.open({
 					templateUrl : 'scripts/app/entities/jobOffer/jobOffer-dialog.html',
 					controller : 'JobOfferDialogController',
 					size : 'lg',
 					resolve : {
 						republish : function () {
+							return false;
+						},
+						satisfied : function () {
 							return false;
 						},
 						entity : ['JobOffer', function (JobOffer) {
@@ -117,12 +127,15 @@ angular.module('jobvacancyApp')
 			authorities : ['ROLE_USER'],
 		},
 		onEnter : ['$stateParams', '$state', '$modal', function ($stateParams, $state, $modal) {
-                $stateParams.satisfied=true;  																 
+               															 
 				$modal.open({
 					templateUrl : 'scripts/app/entities/jobOffer/jobOffer-satisfy-dialog.html',
 					controller : 'JobOfferDialogController',
 					size : 'lg',
 					resolve : {
+						satisfied : function () {
+							return true;
+						},
 						republish : function () {
 							return false;
 						},
@@ -157,6 +170,9 @@ angular.module('jobvacancyApp')
 					resolve : {
 						republish : function () {
 							return true;
+						},
+							satisfied : function () {
+							return false;
 						},
 						entity : ['JobOffer', function (JobOffer) {
 								return JobOffer.get({

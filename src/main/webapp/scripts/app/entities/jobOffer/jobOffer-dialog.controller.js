@@ -3,8 +3,8 @@
 var a=angular.module('jobvacancyApp')
 
 a.controller('JobOfferDialogController',
-	['$scope', '$stateParams', '$modalInstance', 'entity', 'JobOffer', 'User', 'republish',
-		function ($scope, $stateParams, $modalInstance, entity, JobOffer, User, republish) {
+	['$scope', '$stateParams', '$modalInstance', 'entity', 'JobOffer', 'User', 'republish','satisfied',
+		function ($scope, $stateParams, $modalInstance, entity, JobOffer, User, republish,satisfied) {
 
   			$scope.today =new Date().toISOString();
 			$scope.jobOffer = entity;
@@ -32,17 +32,28 @@ a.controller('JobOfferDialogController',
 			$scope.save = function () {
 
 				if ($scope.jobOffer.id != null) {
-					if (republish === true) {$scope.jobOffer.id = null;
-						JobOffer.save($scope.jobOffer, onSaveFinished);
-					} else {
-						
+					
+				
+            if (republish == true) {
+							$scope.jobOffer.id=null;
+						  JobOffer.save($scope.jobOffer, onSaveFinished);
+				
+					  }else{
+				        	if (satisfied == true) {
+					      		$scope.jobOffer.satisfied=true;
+					      	 
+						   JobOffer.update($scope.jobOffer, onSaveFinished);
+				
+				   	}else{
+						 
 						JobOffer.update($scope.jobOffer, onSaveFinished);
-					}
-
-				} else {
-					 var today=new Date();
-  $scope.today = today.toISOString();
+					         }
+           }
+				} 
+				else {
+					 
 					JobOffer.save($scope.jobOffer, onSaveFinished);
+				
 				}
 
 			};

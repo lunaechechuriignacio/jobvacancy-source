@@ -59,12 +59,12 @@ public class JobOffer implements Serializable {
 	}
 
 	public void setId(Long id) {
-
-		if (id == null) {
-			this.setSatisfied(false);
+this.id = id;
+	/*	if (id == null) {
+			this.satisfied=false;
 		}
-
-		this.id = id;
+*/
+		
 	}
 
 	public String getTitle() {
@@ -138,17 +138,13 @@ public class JobOffer implements Serializable {
 	}
 
 	public void setSatisfied(boolean satisfied) {
-		if (this.id == null)
-			this.satisfied = false;
-		else if (satisfied == false) {
+		
+		if (satisfied == true) {
 			this.dateCorrection();
-			this.satisfied = true;
-		}
+			this.satisfied=satisfied;
+		} 
 
-		else {
-			this.dateCorrection();
-			this.satisfied = false;
-		}
+		
 	}
 
 	private void dateCorrection() {
