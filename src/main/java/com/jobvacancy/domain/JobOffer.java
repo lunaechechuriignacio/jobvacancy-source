@@ -139,7 +139,7 @@ public class JobOffer implements Serializable {
 		if (this.id==null)
 		this.satisfied = false;
 		else
-			if (this.satisfied==false)
+			if (satisfied==false)
 				this.satisfied=true;
 			else
 				this.satisfied=false;
