@@ -202,6 +202,8 @@ public class JobOfferResource {
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("jobOffer", id.toString())).build();
 	}
 	
+	
+	
 	/**
 	 * GET /jobOffers -> get all the jobOffers.
 	 */

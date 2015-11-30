@@ -46,17 +46,20 @@
                     <th>Description</th>
                     <th>Expiring Date</th>
 					<th>Applicants number</th>
+                    
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="jobOffer in jobOffers">
                     <td><a ui-sref="jobOffer.detail({id:jobOffer.id})">{{jobOffer.id}}</a></td>
+                  
                     <td>{{jobOffer.title}}</td>
                     <td>{{jobOffer.location}}</td>
                     <td>{{jobOffer.description}}</td>
                     <td>{{jobOffer.dateExpires}}</td>
 					<td>{{jobOffer.applied}}</td>
+                   
                     <td>
                         <button type="submit"
                                 ui-sref="jobOffer.detail({id:jobOffer.id})"
@@ -84,7 +87,7 @@
                             <span class="glyphicon glyphicon-new-window"></span>&nbsp;<span> Republish</span>
                         </button>
                          <button type="submit"
-                                ui-sref="jobOffer.satisfied({id:jobOffer.id})"
+                                ui-sref="jobOffer.satisfied({id:jobOffer.id})" ng-disabled="jobOffer.satisfied"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-ok"></span>&nbsp;<span> Satisfied</span>
                         </button>

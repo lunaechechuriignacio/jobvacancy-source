@@ -136,7 +136,13 @@ public class JobOffer implements Serializable {
 	}
 
 	public void setSatisfied(boolean satisfied) {
-		this.satisfied = satisfied;
+		if (this.id==null)
+		this.satisfied = false;
+		else
+			if (this.satisfied==false)
+				this.satisfied=true;
+			else
+				this.satisfied=false;
 	}
 
 	@Override
